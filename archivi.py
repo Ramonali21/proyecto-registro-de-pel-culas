@@ -51,12 +51,12 @@ def solicitar_anio(mensaje):
             entrada = input(mensaje).strip()
             anio = int(entrada) # Intenta convertir el texto a número entero
             # Verifica que el año sea coherente (1888 fue el año de la primera película de la historia)
-            if 1888 <= anio <= 2100:
+            if 1920 <= anio <= 2100:
                 return anio
-            print("   Error: Ingrese un año válido (entre 1888 y 2100).")
+            print("   Error: Ingrese un año válido (entre 1920 y 2100).")
         except ValueError:
             # Si el usuario escribe letras en lugar de números, se atrapa el error aquí
-            print("  Error: Debe ingresar un número entero válido para el año (ej. 2014).")
+            print("  Error: Debe ingresar un número entero válido para el año (ej. 2067).")
 
 
 def solicitar_calificacion(mensaje):
@@ -188,3 +188,65 @@ def buscar_peliculas(peliculas):
         genero_corto = (peli["genero"][:15] + "...") if len(peli["genero"]) > 18 else peli["genero"]
         print(f"{indice:<4} | {titulo_corto:<30} | {genero_corto:<18} | {peli['anio']:<6} | {peli['calificacion']:.1f}/10")
     print("-" * 75)
+
+
+# Modificar pelicula
+
+def modificar_pelicula(peliculas):
+    print("\n" + "=" * 55)
+    print("\tMODIFICAR PELI")
+    print("=" * 55)
+
+    if not peliculas:
+        print("no hay peliculas disponibles para modificar")
+        return
+    listar_peliculas(peliculas)
+    
+    try:
+        seleccion = int(input("\nIngrese el numero de la pelicula que desea modificar (0 para cancelar): ").strip())
+        if seleccion == 0:
+            print("Operacion detenida")
+            return
+        if seleccion < 1 or seleccion > len(peliculas):
+            print("El numero ingresado no corresponde a ninguna pelicula de la lista")
+            return
+    except ValueError:
+        print("Debe ingresar un numero entero valido")
+        return
+    
+    peli = peliculas[seleccion - 1]
+    print(f"\nEditando: '{peli['titulo']}' (Presione Enter para conservar el valor actual)")
+
+    nuevo_titulo = input(f"Nuevo titulo [{peli['titulo']}]: ").strip()
+    if nuevo_titulo:
+        peli["titulo"] = nuevo_titulo
+
+    nuevo_genero = input(f"Nuevo género [{peli['genero']}]: ").strip()
+    if nuevo_genero:
+        peli["genero"] = nuevo_genero.title()
+
+    while True:
+        nuevo_anio_str = input(f"Nuevo año [{peli['anio']}]: ").strip()
+        if not nuevo_anio_str:
+            break
+        try:
+            nuevo_anio = int(nuevo_anio_str)
+            if 1920 <= nuevo_anio <= 2100:
+                peli["anio"] = nuevo_anio
+                break
+            print("El año debe estar entre 1888 y 2100.")
+        except ValueError:
+            print("Ingrese un número entero válido para el año.")
+    
+    while True:
+        nueva_calif_str = input(f"Nueva calificación (1-10) [{peli['calificacion']}]: ").strip().replace(",", ".")
+        if not nueva_calif_str:
+            break
+        try:
+            nueva_calif = float(nueva_calif_str)
+            if 1.0 <= nueva_calif <= 10.0:
+                peli["calificacion"] = round(nueva_calif, 2)
+                break
+            print(" La calificación debe estar entre 1 y 10.")
+        except ValueError:
+            print("Ingrese un número válido para la calificación.")
