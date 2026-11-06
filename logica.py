@@ -234,7 +234,7 @@ def modificar_pelicula(peliculas):
             if 1920 <= nuevo_anio <= 2100:
                 peli["anio"] = nuevo_anio
                 break
-            print("El año debe estar entre 1888 y 2100.")
+            print("El año debe estar entre 1920 y 2100.")
         except ValueError:
             print("Ingrese un número entero válido para el año.")
     
