@@ -250,3 +250,36 @@ def modificar_pelicula(peliculas):
             print(" La calificación debe estar entre 1 y 10.")
         except ValueError:
             print("Ingrese un número válido para la calificación.")
+
+def eliminar_pelicula(peliculas):
+    print("\n" + "=" * 55)
+    print("                  ELIMINAR PELÍCULA")
+    print("=" * 55)
+
+    if not peliculas:
+        print("no hay pelis para eliminar, si quieres eliminar una, agregue una primero")
+        return
+    
+    listar_peliculas(peliculas)
+
+    try:
+        seleccion = int(input("\nIngrese el número (N°) de la película que desea eliminar (0 para cancelar): ").strip())
+        if seleccion == 0:
+            print("Operacion cancelá")
+            return
+        if seleccion < 1 or seleccion > len(peliculas):
+            print("  [!] Error: El número ingresado no corresponde a ninguna película de la lista.")
+            return
+    except ValueError:
+        print("  [!] Error: Debe ingresar un número entero válido.")
+        return
+        
+    peli_a_borrar = peliculas[seleccion - 1]
+    confirmacion = input(f"¿Está seguro de que desea eliminar '{peli_a_borrar['titulo']}'? (s/n): ").strip().lower()
+
+    if confirmacion == "s":
+        eliminada = peliculas.pop(seleccion - 1)
+        guardar_datos(peliculas)
+        print(f"\n[Éxito] La película '{eliminada['titulo']}' fue eliminada del sistema.")
+    else:
+        print("\nEliminación cancelada.")
